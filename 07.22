@@ -1,0 +1,71 @@
+## 07.21학습 (07.22 실행)
+## def 함수
+  define의 줄임말로 함수 선언하는 방법임
+    def 함수명(변수, 변수2):
+        실행명 = 실행값
+        return 리턴값
+      ex) def add(a, b):
+          rusult = a+b
+          return add
+            -> sum_result = add(3,4)
+              print(sum_result) -> 7이 나옴 ㅇㅇ.. 말그대로 함수 선언해서 리턴값 받는 거지
+
+    ** 여기서 실행값에 이름을 넣으려고 했는데 그러려면  f-string 이라는걸 써야한데
+          ex) def 이름(name):
+              print(f"안녕하세요, {name}")
+            -> print(f"~,{name}")가 있기에 name이 인식이 되는거임 ㅇㅇ..문자는 f-string을 써야지 문자열로 인식이 된다고합니다.
+
+
+##  Nump 라이브러리
+## NUMP 배열 생성
+    import numpy as np -> nump 를 일단 넣어야함
+  내가 이해한 nump는 리스트에 있는 숫자열(문자열이 있으면 안됌)을 전부 숫자화 시켜줘서 계산에 용의하게됨# 07.21학습 (07.22 실행)
+## def 함수
+  define의 줄임말로 함수 선언하는 방법임
+    def 함수명(변수, 변수2):
+        실행명 = 실행값
+        return 리턴값
+      ex) def add(a, b):
+          rusult = a+b
+          return add
+            -> sum_result = add(3,4)
+              print(sum_result) -> 7이 나옴 ㅇㅇ.. 말그대로 함수 선언해서 리턴값 받는 거지
+
+    ** 여기서 실행값에 이름을 넣으려고 했는데 그러려면  f-string 이라는걸 써야한데
+          ex) def 이름(name):
+              print(f"안녕하세요, {name}")
+            -> print(f"~,{name}")가 있기에 name이 인식이 되는거임 ㅇㅇ..문자는 f-string을 써야지 문자열로 인식이 된다고합니다.
+
+
+##  Nump 라이브러리
+## NUMP 배열 생성
+    import numpy as np -> nump 를 일단 넣어야함
+    내가 이해한 nump는 리스트에 있는 숫자열(문자열이 있으면 안됌)을 전부 숫자화 시켜줘서 계산에 용이하게됨.
+    ex) my_list = [1, 2, 3, 4, 5]
+        my_array = np.array(my_list)
+        print(my_array) ->  [1 2 3 4 5] 로 됨.
+
+      여기서 result_array=my_array + 3
+            print(result_array) -> [4,5,6,7,8) 모든 값에 3이 플러스 된 값이 조회됨.
+
+## 인덱스(index)와 슬라이싱(Slicing)
+    nump에서도 둘다 사용이 가능하다.
+      ex) print(my_array[0]) -> 1
+      ex) print(my_array[1,3]) -> 2,3
+        로 조회됨.
+
+
+## pandas 라이브러리
+## 데이터 분석 핵심도구
+    import pandas as pd -> pandas 불러오기
+    데이터가 없어서 타이타닉 호 데이터 가져오기로함
+      # 타이타닉 데이터셋의 URL 주소
+        url = 'https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv'
+        
+       # URL을 사용해 바로 데이터를 불러오기
+        titanic_df = pd.read_csv(url)
+        
+      # 데이터가 잘 불러와졌는지 첫 5줄을 확인
+        print(titanic_df.head())
+
+그 이후는 내일 이어갈 예정.
