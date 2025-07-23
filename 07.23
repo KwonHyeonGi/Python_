@@ -1,0 +1,82 @@
+## 07.23 파이썬 학습
+## 존재하는 데이터에서의 필터링 연습
+
+  컬럼 선택 하기
+    sex_column = tatanic_df['Sex']
+    print(sex_column.haed()) <- .haed() 하는 이유는 너무 많은 데이터가 있기에 앞에 5개만 보여줘서 제대로 작동하는지 확인만 하는 것!
+
+  행 선택
+    .loc = 이름 
+    .iloc   = 위치/순서
+
+      print(tatanic_df.log[ 5:10, ['Age', 'Sex'] ] ) ->  age와 sex칼럼을 5~9행까지 조회
+
+      print(tatanic_df.iloc[ 5:10, 2:4 ] ) -> tatanic_df에서의 2,3번째의 칼럼에서 5~9행을 조회
+
+
+  조건 필터링
+    first_class = titanic_df[ titanic_df[ 'Pclass' ] == 1 ]   ->  first_class 라는 변수는 titanic_df라는 표에서 titanic_df['Pclass'] 라는 칼럼에서의 값이 1인 데이터를 조회한다.
+
+    first_class_10 = titanic_df[ (titanic_df['Age'] < 10) | (titanic_df['Age'] > 60) ] -> fist_class_10 이라는 변수는 titanic_df라는 표에서 'Age'라는 칼럼이 10보다 낮거나, 60보다 높은 데이터를 검색해줌
+
+    pra2 = titanic_df[ (titanic_df['Cabin'].isna() ) & (titanic_df['Sex'] == 'male') & (titanic_df['Embarked'] == 'C') ]
+        -> ['Cabin'].isna() 같은 경우는 Cabin에서의 null값을 찾기위해  
+              ['Cabin'] == null 이 아닌 ['Cabin'].isna()를 사용한다고 함.
+
+
+## 결측치 처리
+  insc() :  null 값을 찾아줌
+  fillna() :  null 값에 값을 채워줌
+
+    나이값이 null인 데이터에 평균나이값을 넣어주기 
+      mean_age = titainc_df['Age'].mean()  -> mean() 은 평균값을 알려주는 코드
+
+    현재 titainc_df['Age'] 에서는 null값이 존재하기에 
+      titainc_df['Age'] = titainc_df['Age'].fillna(mean.age) 
+        라는 코드를 통해서 null값이 평균값으로 바뀐 변수로 변경해줬당
+
+## 데이터 타입 변경
+
+  dtype : 데이터 타입 확인
+  astype : 데이터 타입 변경
+
+  titainc_df['Age'].dtype -> float 으로 되어있음, 평균값도 float이기에 소숫점이 막 있음  
+    -> 이걸 정수화 시킬 예정
+    titainc_df['Age'].astype('int')
+      -> 이를 통해서 age 값은 int로 정수화되서 소숫값도 사라졌음 ㅇㅇ;
+
+
+## 데이터 정렬
+   .sort_values()  : 말그대로 정렬해줌 (기본이 오름차순)
+  ascending=False :  내림차순으로 변경해줌
+
+    Pclass 순으로 정렬하고, 그 중에서도  Age는 내림차순으로 정렬하기
+    
+      sort_muit = titanic_df.sort_values (by=['Pclass','Age'], ascending=[True, False] )
+        이런 식으로 sort_values() 에서 () 안에는 by= 를 통해서 정렬하려는 칼럼을 넣으면 된다.
+
+
+## 새로운 칼럼 넣어서 놀아보기
+  나이 연령대라는 칼럼을 만들어볼거임
+    import numpy as np 로 numpy 넣어주고
+        titanic_df['Age_group'] = np.where(titanic_df['Age'] < 18 , 'child', 'adult')
+      라는 np.where 절 사용
+                                          조건을 부여하고, 참일경우, 거짓이 경우
+                                          라는 코드가 된다.
+
+## 그룹별 집계
+  .groupby() : 그룹에 대한 집계
+  .agg() : 여러 집계를 볼 수 있음
+
+  성별 생존확률 조회
+    age_sur = titanic_df.groupby('Sex')[survival].mean()
+
+  객실 등급과 성별의 생존 확률 조회
+    pc_sur = titanic_df.groubpy('Pclass','Sex')[survival].mean()
+
+  객실 등급으로 나눠서 각 계급 별 요금과 나이 평균 계산
+    pc_di = titanic_df.groupby('Pclass').agg({
+          'Fare' = 'mean',
+          'Age' = 'mean'
+    })
+
