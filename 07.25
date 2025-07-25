@@ -1,0 +1,62 @@
+## 07.25 파이썬 학습
+## 중복 데이터 처리
+    .depulicated() : 중복이 있는지 확인 가능
+    .drop_depulicated() : 중복이 있는 부분을 삭제해줌
+    .drop_depulicated(subset=['']) : ['']안에  들어있는 칼럼을 기준으로 중복을 제거해줌.
+
+## pivot_table 
+   : 데이터를 내가 원하는 모양으로 표로 만들어줌
+
+    index: 새로운 표의 행이 될 컬럼
+
+    columns: 새로운 표의 열이 될 컬럼
+    
+    values: 표 안에 채워 넣을 값
+    
+    aggfunc: 값을 채울 때 사용할 집계 함수 (예: mean, sum, count)
+      
+          # pivot_table 생성
+                survival_pivot = titanic_df.pivot_table(
+                    index='Pclass',      # 행에는 객실 등급을
+                    columns='Sex',       # 열에는 성별을
+                    values='Survived',   # 값으로는 생존 여부를
+                    aggfunc='mean'       # 집계는 평균(생존율)으로
+                )
+    이를 통해서 보기 간편한 표로 나타낼 수 있다.
+
+## Pandas로 SQL 구현하기
+  sql 에서 했던  각 부서에서 가장 높은 연봉을 받는 직원의 이름, 연봉, 부서명 구하기를 panadas로 해볼 예정
+   
+# employees 데이터프레임
+    employees_df = pd.DataFrame({
+        'employee_id': [1, 2, 3, 4, 5, 6, 7],
+        'employee_name': ['김철수', '이영희', '박민준', '최지우', '홍길동', '장그래', '김미영'],
+        'department_id': [101, 102, 101, None, 101, 102, 103],
+        'salary': [5000, 6000, 5500, 4000, 5200, 7000, 4800]
+    })
+
+# departments 데이터프레임
+    departments_df = pd.DataFrame({
+        'department_id': [101, 102, 103],
+        'department_name': ['인사팀', '개발팀', '마케팅팀']
+    })
+
+
+데이터는 sql과 동일
+
+# 1. 각 직원이 속한 부서의 '최고 연봉'을 계산해서 새 컬럼으로 추가
+employess_df['max_salary'] = employess_df.groupby('department_id')[salary].transform('max') 
+          : employess_df에 'max_salary'라는 칼럼을 추가해준다. 그 칼럼은 'department_id'로 그룹화 할 것이며, 이 데이터를 원래 데이터에 넣을 것이다. 그 역할을 하는게 [salary].transform('max') 이다.
+
+# 2. 직원의 연봉(salary)과 그 부서의 최고 연봉(max_salary)이 같은 경우만 필터링
+highest_earners = employees_df[  employees_df['salary'] == employees_df['max_salary']  ]
+
+# 3. 위 결과와 departments_df를 합쳐서(merge) 부서 이름을 가져온다
+result_df = pd.merge(
+            highest_earners,
+            departments_df,
+            on = 'departments_id'
+            how = 'left'
+)
+
+
