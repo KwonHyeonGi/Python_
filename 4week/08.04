@@ -1,0 +1,36 @@
+## 08.04파이썬 학습
+##파이썬 학습: 데이터 시각화 (Seaborn)
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+##Seaborn 막대 그래프 실습 (sns.barplot)
+목표: product_name (상품)별로 총 판매 수량을 막대 그래프로 시각화해 보겠습니다.
+
+product_sales = df_orders.groupby('product_name')['quantity'].sum().reset_index()
+-> 상품 별 총 판매수량 을 나타내는 함수 지정
+
+plt.figure(figsize=(10,6)) 
+-> 글꼴 사이즈 설정
+
+sns.barplot(x='product_name', y='quantity', data=prodcut_sales)
+plt.title('상품별 총 판매 수량') # 그래프 제목
+plt.xlabel('상품명') # x축 라벨
+plt.ylabel('총 판매 수량') # y축 라벨
+plt.show() # 그래프 보여주기
+
+이런 식으로 나타내면 막대 그래프가 등장
+
+
+## countplot
+
+plt.figure(figsize=(10, 6))
+sns.countplot(x='product_name', data=df_orders)
+
+plt.title('상품별 총 주문 건수')
+plt.xlabel('상품명')
+plt.ylabel('주문 건수')
+plt.show()
+
+barplot은 x와 y의 값을 정해줘서 시각화 해준다면
+countplot은 x값의 수가 y값으로 알아서 지정이 됌.
