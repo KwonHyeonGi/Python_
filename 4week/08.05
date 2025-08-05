@@ -1,0 +1,15 @@
+## 08.05 파이썬 학습
+## 미니 프로젝트 1: 기술 통계량 계산 및 분석
+
+ describe() :  숫자형 데이터에 대한 개수, 평균, 표준편차, 최소값, 최대값, 사분위수를 한 번에 계산해줌.
+  print(df_iris.describe()) -> 이런식으로 하면 모든 숫자형 데이터의 집계값이 나옴 ㅇㅇ
+
+ 좀더 그룹화 해서 보고싶다면 groupby 를 이용
+  print(df_iris.groupby('species').describe()) -> sepecies라는 칼럼으로 그룹화해서 집계를 해봄
+
+개인적으로 칼럼의 평균값을 알고싶으면 df_iris['sepal_length'].mean()) 이런식으로 써서 확인이 가능하지만, describe를 쓰면 다 나오니까 이게 더 효율적일지도?
+
+ corr() : 상관 관계를 숫자로 보여주는 함수( 1에 가까우면 증가하면 증가, 0에 가까우면 관계 없음, -1에 가까우면 증가하면 감소 )
+  print(df_iris.corr(numeric_only = True)) -> 여기서 numeric_only = True 를 하는 이유는 
+                                              corr는 정수, 실수값 즉 숫자데이터로 집계를 내기때문에 문자형이 있으면 오류를 낼 수 있음
+                                              그렇기에 문자형이 나오면 무시해라 라는 의미를 가진 numeric_only = True를 써줌 
