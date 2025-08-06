@@ -1,0 +1,73 @@
+## 08.06 파이썬 학습
+
+## 히스토그램, KDE플롯
+
+히스토그램
+
+  plt.figure(figsize=(10, 6))
+  sns.histplot(data=df_iris, x='sepal_length', bins=20) # bins는 구간의 개수
+  plt.title('꽃받침 길이의 히스토그램')
+  plt.xlabel('꽃받침 길이')
+  plt.ylabel('빈도')
+  plt.show()
+  
+  bins가 y값이 되고, 20개까지의 그래프를 보여줌
+
+KDE플롯
+  plt.figure(figsize=(10, 6))
+  sns.kdeplot(data=df_iris, x='sepal_length', fill=True)
+  plt.title('꽃받침 길이의 KDE 플롯')
+  plt.xlabel('꽃받침 길이')
+  plt.ylabel('밀도')
+  plt.show()
+
+fill = True 를 통해서 그래프안을 채울까 말까를 선택가능, 채우기 싫으면 False
+
+칼럼별로 히스토그램/KDE플롯 그리기
+  # 종별로 색상을 다르게 한 히스토그램
+  plt.figure(figsize=(10, 6))
+  sns.histplot(data=df_iris, x='sepal_length', hue='species', multiple='stack')
+  plt.title('붓꽃 종별 꽃받침 길이 분포')
+  plt.show()
+
+hue='species'를 통해서 그래프 안에서도 종마다 색이 다르게 나타남
+
+데이터 전처리 (결측기, 이상치 처리)
+
+  결측치 : null값이 있는 것
+  확인 방법은 df_iris_isnull().sum() 
+  으로 확인 가능
+
+이상치 : 박스플롯에서 점으로 표시된 이상치(평균수치보다 이상하게 높거나 낮은 평균값에 위배되는 친구들)
+  확인 결과 species 에서 virginica 에 이상치가 있는걸 확인함
+  제거를 위해서 우선 평균값을 구함
+    df_species2 = df_iris[ df_iris['species'] == 'virginica') ]
+    df_spemean = df_species2['sepal_length'].mean()
+  후 이상 이하를 제거하려했지만 틀렸다고함
+
+  여기서는 평균 값을 구해서 그 평균값에 맞지않은 데이터를 삭제하는게 아니고 이상치 IQR방식을 사용해야한다함
+    IQR : 3사분위수(Q3)에서 1사분위수(Q1)를 뺸 값 = 데이터의 중간 50%분포하는 범위
+    이상치 기준 : 1사분위수 -1.5 * IQR >= | 3사분위수 +1.5 * IQR <=
+
+  # 기술 통계량을 사용하여 Q1(25%)과 Q3(75%)를 가져옵니다.
+  Q1 = df_species2['sepal_length'].quantile(0.25)   -> 0.25는 위에서 25번째
+  Q3 = df_species2['sepal_length'].quantile(0.75)   -> 0.75는 위에서 75번째를 뜻 함
+    IQR = Q3 - Q1    -> 75번째의 수와 25번째 수를 빼서 딱 중간의 값이 계산 됨
+
+이상치의 경계값 
+  lower_bound = Q1 - 1.5 * IQR
+  upper_bound = Q3 + 1.5 * IQR
+
+값을 구했으니 실제 데이터에서 이상치를 제거함
+
+ df_virgincia_cleaned= df_species2.loc[ (df_species2['sepal_length'] >= lower_bound) & (df_species2['sepal_length'] <= upper_bound) ]
+
+그 후 다른 나머지 종 데이터
+  df_others = df_iris.loc[df.iris['species'] != 'virginica']
+
+를 이상치를 제거한 virgincia데이터와 합침
+df_cleand = pd.concat([df.others, df_viginica_cleand])
+
+이러면 df_cleaned 는 virgincia의 이상치가 제거 된 버전
+
+조금 어렵네잉+~+
